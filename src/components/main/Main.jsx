@@ -1,12 +1,12 @@
 import Navbar from "../navbar/Navbar";
-import Weather from "../weather/Weather";
+import QRCode from "../qrcode/QRCode";
 import "./Main.css";
 
 function Main(){
   return (
     <div id="main-container">
       <Navbar></Navbar>
-      <Weather></Weather>
+      <QRCode></QRCode>
     </div>
   )
 }
