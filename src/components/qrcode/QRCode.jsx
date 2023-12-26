@@ -1,7 +1,7 @@
 import {useState} from "react";
 import PropTypes from "prop-types";
 import ResponseModel from "../../interfaces/response.jsx";
-import {Buffer} from "buffer";
+//import {Buffer} from "buffer";
 import "./QRCode.css";
 
 QRCode.propTypes = {
@@ -56,19 +56,15 @@ function QRCode({setResponse}){
             })
             .then(response => response.arrayBuffer())
             .then(data => {
-
-
-                const binary = Buffer.from(data); //or Buffer.from(data, 'binary')
+                /*const binary = Buffer.from(data); //or Buffer.from(data, 'binary')
                 const imageData = new Blob(binary.buffer,{type:"application/png"});
                 const link = URL.createObjectURL(imageData);
-                /*const image = new Image(width,height);
-                image.onload = () => URL.revokeObjectURL(link);
-                image.src = link;
-                console.log(image);*/
-                console.log(link);
-                //setImageURL(link);
-                console.log(data);
+                //const image = new Image(width,height);
+                //image.onload = () => URL.revokeObjectURL(link);
+                //image.src = link;
+                setImageURL(link);*/
 
+                console.log(data);
 
                 const response = new ResponseModel();
                 response.message = "The qr-code has generated correctly with the parameters inserted.";
