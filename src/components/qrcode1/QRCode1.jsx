@@ -2,6 +2,7 @@ import {useState} from "react";
 import PropTypes from "prop-types";
 import ResponseModel from "../../interfaces/response.jsx";
 //import {Buffer} from "buffer";
+import QRCode from "react-qr-code";
 import "./QRCode1.css";
 
 QRCode1.propTypes = {
@@ -113,7 +114,27 @@ function QRCode1({setResponse}){
                 <input type="color" name="bgColor" id="bgColor" value={values.bgColor} onChange={changeValues}/>
                 <input type="submit" value="Generate QRCode now"/>
             </form>
+
+
+            {
+                //non funziona questa immagine perchè non funziona il form nel trasformare il buffer ricevuto dall'api in immagine
+            }
             <img src={imageURL} alt="Image generated from the external api"/>
+
+
+            {
+                //componente react di default presente nel framework per creare qrcode personalizzati
+            }
+            <QRCode
+                bgColor={values.bgColor}
+                fgColor={values.fgColor}
+                level="L"
+                size={parseInt(values.width)}
+                title=""
+                value={values.content}>
+            </QRCode>
+
+
         </div>
     );
 }
