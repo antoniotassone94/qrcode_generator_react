@@ -2,13 +2,13 @@ import {useState} from "react";
 import PropTypes from "prop-types";
 import ResponseModel from "../../interfaces/response.jsx";
 //import {Buffer} from "buffer";
-import "./QRCode.css";
+import "./QRCode1.css";
 
-QRCode.propTypes = {
+QRCode1.propTypes = {
     setResponse:PropTypes.func
 }
 
-function QRCode({setResponse}){
+function QRCode1({setResponse}){
     function generateQRCode(event){
         event.preventDefault();
         const content = values.content;
@@ -118,4 +118,4 @@ function QRCode({setResponse}){
     );
 }
 
-export default QRCode
+export default QRCode1
