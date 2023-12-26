@@ -1,6 +1,11 @@
 import {useState} from "react";
+import PropTypes from "prop-types";
 import ResponseModel from "../../interfaces/response.jsx";
 import "./QRCode.css";
+
+QRCode.propTypes = {
+    setResponse:PropTypes.func
+}
 
 function QRCode({setResponse}){
     function generateQRCode(event){
