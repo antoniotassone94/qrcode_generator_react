@@ -1,6 +1,7 @@
 import {useState} from "react";
 import PropTypes from "prop-types";
 import ResponseModel from "../../interfaces/response.jsx";
+import {Buffer} from "buffer";
 import "./QRCode.css";
 
 QRCode.propTypes = {
@@ -10,14 +11,14 @@ QRCode.propTypes = {
 function QRCode({setResponse}){
     function generateQRCode(event){
         event.preventDefault();
-        const text = values.text;
+        const content = values.content;
         const width = parseInt(values.width);
         const height = parseInt(values.height);
         const fgColor = values.fgColor;
         const bgColor = values.bgColor;
         let message = "";
         let check = true;
-        if(text === undefined || text === null || text === ""){
+        if(content === undefined || content === null || content === ""){
             message += "The text inserted is invalid.\n";
             check = false;
         }
@@ -38,15 +39,48 @@ function QRCode({setResponse}){
             check = false;
         }
         if(check === true){
+            fetch("https://" + import.meta.env.VITE_XRapidAPIHost + "/qr-code",{
+                'method':'POST',
+                'headers':{
+                    'Content-type':'application/json',
+                    'X-RapidAPI-Key':import.meta.env.VITE_XRapidAPIKey,
+                    'X-RapidAPI-Host':import.meta.env.VITE_XRapidAPIHost
+                },
+                'body':JSON.stringify({
+                    content:content,
+                    width:width,
+                    height:height,
+                    "fg-color":fgColor,
+                    "bg-color":bgColor
+                })
+            })
+            .then(response => response.arrayBuffer())
+            .then(data => {
 
 
-            console.log(text,width,height,fgColor,bgColor);
-            const response = new ResponseModel();
-            response.message = "Function isn't available.";
-            response.check = true;
-            setResponse(response);
+                const binary = Buffer.from(data); //or Buffer.from(data, 'binary')
+                const imageData = new Blob(binary.buffer,{type:"application/png"});
+                const link = URL.createObjectURL(imageData);
+                /*const image = new Image(width,height);
+                image.onload = () => URL.revokeObjectURL(link);
+                image.src = link;
+                console.log(image);*/
+                console.log(link);
+                //setImageURL(link);
+                console.log(data);
 
 
+                const response = new ResponseModel();
+                response.message = "The qr-code has generated correctly with the parameters inserted.";
+                response.check = true;
+                setResponse(response);
+            })
+            .catch(error => {
+                const response = new ResponseModel();
+                response.message = error;
+                response.check = false;
+                setResponse(response);
+            });
         }else{
             const response = new ResponseModel();
             response.message = message;
@@ -61,17 +95,18 @@ function QRCode({setResponse}){
     }
 
     const [values,setValues] = useState({
-        text:"",
+        content:"",
         width:128,
         height:128,
         fgColor:"#000000",
         bgColor:"#ffffff"
     });
+    const [imageURL,setImageURL] = useState("src/assets/images/react.svg");
     return (
         <div id="data-container">
             <form onSubmit={generateQRCode}>
-                <label htmlFor="text">Text</label>
-                <textarea name="text" id="text" cols="30" rows="10" value={values.text} onChange={changeValues}></textarea>
+                <label htmlFor="content">Text to convert</label>
+                <textarea name="content" id="content" cols="30" rows="10" value={values.content} onChange={changeValues}></textarea>
                 <label htmlFor="width">Width</label>
                 <input type="number" name="width" id="width" value={values.width} onChange={changeValues}/>
                 <label htmlFor="height">Height</label>
@@ -82,6 +117,7 @@ function QRCode({setResponse}){
                 <input type="color" name="bgColor" id="bgColor" value={values.bgColor} onChange={changeValues}/>
                 <input type="submit" value="Generate QRCode now"/>
             </form>
+            <img src={imageURL} alt="Image generated from the external api"/>
         </div>
     );
 }
