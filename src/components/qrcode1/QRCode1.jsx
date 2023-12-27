@@ -57,15 +57,17 @@ function QRCode1({setResponse}){
             })
             .then(response => response.arrayBuffer())
             .then(data => {
-                /*const binary = Buffer.from(data); //or Buffer.from(data, 'binary')
-                const imageData = new Blob(binary.buffer,{type:"application/png"});
+                //const binary = Buffer.from(data); //or Buffer.from(data, 'binary')
+                const imageData = new Blob(data,{type:"application/png"});
                 const link = URL.createObjectURL(imageData);
+
+                //create image object manually
                 //const image = new Image(width,height);
                 //image.onload = () => URL.revokeObjectURL(link);
                 //image.src = link;
-                setImageURL(link);*/
 
-                console.log(data);
+                //function to update the useState of the component
+                setImageURL(link);
 
                 const response = new ResponseModel();
                 response.message = "The qr-code has generated correctly with the parameters inserted.";
